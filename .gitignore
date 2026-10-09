@@ -1,0 +1,18 @@
+# sekrety i konfiguracja lokalna
+.env
+*.local.json
+appsettings.Development.json
+# .NET
+bin/
+obj/
+.vs/
+# Node / frontend
+node_modules/
+dist/
+# system i edytory
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+# kopie bazy z danymi
+*.backup
