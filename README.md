@@ -1,3 +1,2 @@
 # Praktyka
-# Praktyka
 dewadadawd
