@@ -22,11 +22,11 @@ Celem aplikacji jest ułatwienie organizacji pracy. Podczas realizacji projektu 
 
  
 
-Dodawanie zadań z tytułem i opisem.
+- Dodawanie zadań z tytułem i opisem.
 
  
 
-Wyświetlanie listy zadań.
+- Wyświetlanie listy zadań.
 
  
 
@@ -120,11 +120,10 @@ tests/ — testy aplikacji.
 
  
 
-Dokumentacja frontendu
-
+- Dokumentacja frontendu
  
 
-Dokumentacja backendu
+- Dokumentacja backendu
 
  
 
