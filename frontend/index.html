@@ -1,12 +1,77 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8">
-  <title>Task Manager</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/app.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moje Zadania - lista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Task Manager</h1>
+  <header class="topbar">
+    <div class="brand">
+      <span>Moje Zadania</span>
+    </div>
+    <button id="logoutBtn" class="btn btn-ghost">Wyloguj</button>
+  </header>
+
+  <main class="container">
+    <h1>Moje zadania</h1>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" id="addBtn">+ Dodaj zadanie</button>
+      <input type="search" id="search" placeholder="Szukaj zadania..." />
+      <select id="filter">
+        <option value="all">Wszystkie</option>
+        <option value="todo">Do zrobienia</option>
+        <option value="in_progress">W trakcie</option>
+        <option value="done">Wykonane</option>
+      </select>
+    </div>
+
+    <ul id="taskList" class="cards"></ul>
+    <p id="emptyMsg" class="empty hidden">Brak zadań. Dodaj pierwsze zadanie przyciskiem powyżej.</p>
+
+    <section id="formSection" class="card hidden">
+      <h2 id="formTitle">Dodaj zadanie</h2>
+      <form id="taskForm">
+        <label>Tytuł (wymagany)
+          <input type="text" id="title" required maxlength="200" placeholder="np. Przygotować ERD" />
+        </label>
+        <label>Opis
+          <textarea id="description" rows="3" placeholder="Krótki opis…"></textarea>
+        </label>
+        <label>Status
+          <select id="status">
+            <option value="todo">Do zrobienia</option>
+            <option value="in_progress">W trakcie</option>
+            <option value="done">Wykonane</option>
+          </select>
+        </label>
+        <p id="formError" class="error hidden">Wpisz tytuł zadania.</p>
+        <div class="row">
+          <button type="submit" class="btn btn-primary" id="saveBtn">Dodaj zadanie</button>
+          <button type="button" class="btn btn-ghost" id="cancelBtn">Anuluj</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card login-demo">
+      <h2>Logowanie (prototyp)</h2>
+      <form id="loginForm">
+        <label>E-mail
+          <input type="email" id="email" placeholder="jan@example.com" required />
+        </label>
+        <label>Hasło
+          <input type="password" id="password" placeholder="••••••••" required />
+        </label>
+        <button type="submit" class="btn btn-primary">Zaloguj się</button>
+        <p id="loginError" class="error hidden">Nie udało się zalogować. Sprawdź adres e-mail i hasło.</p>
+      </form>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>

@@ -1,57 +1,29 @@
-# Praktyka — internetowy system zarządzania zadaniami
+# praktyka-project - Moje Zadania
 
-## Opis projektu
+Repo na praktyki, INF.03. Aplikacja do zapisywania zadań.
 
-Projekt jest aplikacją internetową do zarządzania zadaniami. Użytkownik będzie mógł zapisywać zadania, przeglądać je i aktualizować ich status. Aplikacja pomoże sprawdzić, co jeszcze trzeba zrobić i które zadania zostały zakończone.
+## Co to jest
 
-## Cel projektu
+Zwykła lista zadań. Można dodawać zadania, zmieniać status (do zrobienia / w trakcie / wykonane), edytować i usuwać. Do tego komentarze i logowanie (na razie prototyp).
 
-Celem aplikacji jest ułatwienie organizacji pracy. Podczas realizacji projektu uczymy się tworzyć interfejs użytkownika, przygotowywać część serwerową i korzystać z bazy danych. Ćwiczymy także pracę z Git, GitHub i automatyczne sprawdzanie kodu.
+## Gdzie co jest
 
-## Planowane funkcjonalności
+```text
+frontend/   - strona (index.html + style.css + app.js)
+backend/    - tu później będzie API
+database/   - baza PostgreSQL (schema.sql, seed.sql)
+docs/       - opis, kolory, ERD
+tests/      - co sprawdzałem ręcznie
+```
 
-- Dodawanie zadań z tytułem i opisem.
-- Wyświetlanie listy zadań.
-- Edytowanie i usuwanie zadań.
-- Zmiana statusu: do zrobienia, w trakcie lub zakończone.
-- Wyszukiwanie i filtrowanie zadań.
-- Zapisywanie zadań w bazie danych.
+## Jak odpalić
 
-## Planowane technologie
+1. Otwierasz `frontend/index.html` w Chrome, nic nie trzeba instalować.
+2. Baza: instalujesz PostgreSQL 18, hasło dajesz `postgres`, tworzysz bazę `taskmanager` i odpalasz `database/schema.sql`, potem `seed.sql`.
 
-- HTML — struktura stron i formularzy.
-- CSS — wygląd interfejsu.
-- JavaScript — obsługa działań użytkownika i komunikacja z API.
-- PostgreSQL — przechowywanie danych.
-- Technologia backendu — do ustalenia.
+## Docs
 
-## Narzędzia
-
-- Git — zapisywanie historii zmian.
-- GitHub — przechowywanie repozytorium i przegląd zmian przez pull requesty.
-- GitHub Actions — automatyczne sprawdzanie kodu.
-- Markdown — tworzenie dokumentacji.
-
-## Struktura projektu
-
-- `frontend/` — interfejs widoczny dla użytkownika.
-- `backend/` — obsługa zapytań, logika aplikacji i komunikacja z bazą danych.
-- `database/` — pliki związane z bazą danych.
-- `docs/` — dodatkowa dokumentacja.
-- `tests/` — testy aplikacji.
-- `.github/workflows/` — konfiguracja GitHub Actions.
-
-## Dokumentacja poszczególnych części
-
-- [Dokumentacja frontendu](frontend/README.md)
-- [Dokumentacja backendu](backend/README.md)
-
-## Uruchomienie
-
-Instrukcja uruchomienia zostanie uzupełniona na kolejnych etapach projektu.
-
-## Pierwsze zajęcia
-
-Poznaliśmy prowadzącego, zasady BHP, organizację praktyk i wymagania projektu. Założyliśmy konta GitHub oraz utworzyliśmy lokalne repozytorium.
-
-Ćwiczyliśmy operacje commit, push i pull, tworzenie pull requestów oraz rozwiązywanie konfliktów. Zabezpieczyliśmy gałąź main przed bezpośrednimi zmianami i dodaliśmy workflow GitHub Actions sprawdzający kod.
+- `docs/wymagania.md` - co program ma robić
+- `docs/design.md` - jak ma wyglądać
+- `docs/erd.md` - baza, tabele USERS, TASKS, COMMENTS
+- `docs/notatki-markdown.md` - moje notatki z Markdown
