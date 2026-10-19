@@ -1,33 +1,42 @@
--- Uzytkownik z prawem SELECT do tabel aplikacji.
--- Uruchom jeden raz jako postgres w bazie task_manager.
--- Testy uprawnien wykonuj w tej samej sesji przez SET ROLE userek
--- oraz RESET ROLE. Przy tej metodzie nie jest potrzebne osobne logowanie.
+-- Role uzytkownikow bazy danych
 
-CREATE ROLE userek LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE;
+-- Tworzenie rol, jesli jeszcze nie istnieja
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'userek'
+    ) THEN
+        CREATE ROLE userek LOGIN
+        NOSUPERUSER NOCREATEDB NOCREATEROLE;
+    END IF;
 
-GRANT CONNECT ON DATABASE task_manager TO userek;
-GRANT USAGE ON SCHEMA public TO userek;
-GRANT SELECT ON TABLE public.users, public.tasks, public.comment TO userek;
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_roles WHERE rolname = 'task_app'
+    ) THEN
+        CREATE ROLE task_app LOGIN
+        NOSUPERUSER NOCREATEDB NOCREATEROLE;
+    END IF;
+END
+$$;
 
--- Zadanie 6 - rola uzytkownika aplikacji
+-- Dostep do bazy i schematu
+GRANT CONNECT ON DATABASE task_manager
+TO userek, task_app;
 
--- Tworzenie roli task_app
-CREATE ROLE task_app LOGIN
-NOSUPERUSER NOCREATEDB NOCREATEROLE;
+GRANT USAGE ON SCHEMA public
+TO userek, task_app;
 
--- Dostep do bazy danych
-GRANT CONNECT ON DATABASE task_manager TO task_app;
+-- Userek: tylko odczyt
+GRANT SELECT
+ON TABLE public.users, public.tasks, public.comments
+TO userek;
 
--- Dostep do schematu public
-GRANT USAGE ON SCHEMA public TO task_app;
-
--- Uprawnienia do tabel tasks i comment
+-- Task_app: odczyt i modyfikacja zadan i komentarzy
 GRANT SELECT, INSERT, UPDATE, DELETE
-ON TABLE public.tasks, public.comment
+ON TABLE public.tasks, public.comments
 TO task_app;
 
--- Uprawnienia do tabeli users
--- Bez mozliwosci usuwania uzytkownikow
+-- Task_app: bez prawa usuwania uzytkownikow
 GRANT SELECT, INSERT, UPDATE
 ON TABLE public.users
 TO task_app;
