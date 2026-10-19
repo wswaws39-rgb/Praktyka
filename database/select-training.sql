@@ -22,3 +22,21 @@ SELECT t.title, u.login AS autor
 FROM tasks AS t
 JOIN users AS u ON u.id = t.user_id
 ORDER BY t.id;
+
+-- 5. INSERT - dodawanie nowego zadania
+INSERT INTO tasks (title, description, status, user_id)
+VALUES (
+    'Zadanie testowe CRUD',
+    'Test dodawania zadania',
+    'new',
+    (SELECT id FROM users WHERE login = 'anna')
+);
+
+-- 6. UPDATE - aktualizacja statusu zadania
+UPDATE tasks
+SET status = 'in_progress'
+WHERE title = 'Zadanie testowe CRUD';
+
+-- 7. DELETE - usuwanie zadania
+DELETE FROM tasks
+WHERE title = 'Zadanie testowe CRUD';
