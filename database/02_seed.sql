@@ -26,7 +26,7 @@ INSERT INTO tasks (title, description, status, user_id) VALUES
         (SELECT id FROM users WHERE login = 'jan'));
 
 -- 3. Dodanie pięciu komentarzy
-INSERT INTO comment (content, task_id, user_id) VALUES
+INSERT INTO comments (content, task_id, user_id) VALUES
     ('Makieta zaakceptowana.',
         (SELECT id FROM tasks WHERE title = 'Przygotować makietę'),
         (SELECT id FROM users WHERE login = 'admin')),
