@@ -22,7 +22,7 @@ CREATE TABLE tasks (
 );
 
 -- Tabela komentarzy
-CREATE TABLE comment (
+CREATE TABLE comments (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
