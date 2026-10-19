@@ -1,4 +1,4 @@
--- Zadanie 6: uzytkownik z prawem SELECT do tabel aplikacji.
+-- Uzytkownik z prawem SELECT do tabel aplikacji.
 -- Uruchom jeden raz jako postgres w bazie task_manager.
 -- Testy uprawnien wykonuj w tej samej sesji przez SET ROLE userek
 -- oraz RESET ROLE. Przy tej metodzie nie jest potrzebne osobne logowanie.
