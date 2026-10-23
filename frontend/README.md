@@ -1,36 +1,126 @@
-# Frontend
+# Frontend — Moje zadania
 
-## Przeznaczenie
+## Funkcje
 
-Frontend to część aplikacji, z której użytkownik korzysta w przeglądarce. Pozwala przeglądać zadania, dodawać nowe i zmieniać istniejące. Przekazuje działania użytkownika do backendu przez API i wyświetla otrzymane dane.
+- Tablica zadań z trzema kolumnami statusów oraz formularz dodawania i edycji.
+- Karta pokazuje tytuł i opis; pusty opis jest zastępowany tekstem „brak opisu”.
+- Po zapisaniu nowego statusu zadanie trafia do właściwej kolumny.
+- Usuwanie z potwierdzeniem.
+- Zapytania `GET`, `POST`, `PUT` i `DELETE` przez `fetch`.
+- Tytuł wymagany po usunięciu skrajnych spacji, maksymalnie 200 znaków.
+- Statusy zgodne z bazą: `new`, `in_progress`, `done`.
+- Komunikaty o braku połączenia, przekroczeniu czasu oczekiwania,
+  błędnych danych, braku rekordu i błędzie serwera.
+- Dane API są wyświetlane przez `textContent`; pola formularza przez `value`.
+- Zachowanie danych formularza po nieudanym zapisie i blokada ponownych
+  kliknięć podczas zapytania.
+- Układ dla telefonu i komputera, zgodny z paletą i czcionkami z `docs/design.md`.
 
-## Planowane technologie
+## Kolumny tablicy
 
-- HTML — struktura strony i formularzy.
-- CSS — wygląd strony i dostosowanie jej do różnych ekranów.
-- JavaScript — obsługa przycisków, formularzy i komunikacji z backendem.
+| Status API | Kolumna |
+|---|---|
+| `new` | Do zrobienia |
+| `in_progress` | W trakcie |
+| `done` | Wykonane |
 
-## Planowane widoki
+Na komputerze kolumny są obok siebie. Przy szerokości do 760 px układają
+się jedna pod drugą. Każda kolumna ma licznik i informację o braku zadań.
+Przed pierwszym poprawnym pobraniem danych licznik pokazuje „—”, aby błąd
+połączenia nie był przedstawiany jako pusta tablica.
 
-- Lista zadań z tytułem i statusem.
-- Formularz dodawania zadania.
-- Formularz edycji zadania.
-- Wyszukiwanie i filtrowanie zadań według statusu.
+## Pliki
 
-## Wygląd i obsługa
+- `index.html` — struktura strony i formularza.
+- `css/style.css` — kolory, wygląd i układ responsywny.
+- `js/app.js` — walidacja, wyświetlanie danych i komunikacja z API.
 
-Interfejs powinien być prosty i czytelny. Na stronie głównej planuję umieścić listę zadań oraz przycisk dodawania nowego zadania.
+## Uruchomienie
 
-Statusy będą oznaczone tekstem i różnymi kolorami. Przy zadaniach znajdą się przyciski edycji i usuwania. Przed usunięciem aplikacja poprosi o potwierdzenie.
+Serwer w `backend/` udostępnia katalog `frontend/` oraz API `/api/tasks`
+w tej samej domenie. Wykonaj [instrukcję backendu](../backend/README.md),
+uzupełnij `backend/.env`, uruchom `npm ci` i `npm start` w katalogu
+`backend`, a następnie otwórz `http://127.0.0.1:3000`.
 
-Formularz będzie informował o brakującym tytule zadania. Użytkownik zobaczy również komunikat, jeśli zapis danych się nie powiedzie. Układ strony powinien działać na komputerze i telefonie.
+Sam wygląd strony, bez API, można również uruchomić lokalnie:
 
-## Proponowana struktura katalogów
+```bash
+python -m http.server 8000 --directory frontend
+```
 
-- `index.html` — główna strona aplikacji.
-- `css/` — pliki stylów.
-- `js/` — skrypty obsługujące interfejs i zapytania do API.
-- `images/` — obrazy i ikony.
-- `README.md` — dokumentacja frontendu.
+Następnie otwórz `http://localhost:8000`.
+Ten prosty serwer udostępnia pliki, ale nie obsługuje API.
+Bez backendu strona pokaże komunikat o nieudanym pobraniu zadań.
+Nie zastępuje bazy danych pamięcią przeglądarki ani danymi demonstracyjnymi.
 
-Jest to planowana struktura, która może zmienić się podczas realizacji projektu.
+Jeżeli backend działa pod innym adresem, zmień `API_URL` na początku
+`js/app.js` i skonfiguruj dozwolone pochodzenie (CORS) po stronie backendu.
+
+## Oczekiwany kontrakt API
+
+| Metoda | Adres | Działanie |
+|---|---|---|
+| GET | `/api/tasks` | Pobranie tablicy zadań |
+| POST | `/api/tasks` | Dodanie zadania |
+| PUT | `/api/tasks/{id}` | Zapis zmian zadania |
+| DELETE | `/api/tasks/{id}` | Usunięcie zadania |
+
+Przykładowa odpowiedź na `GET /api/tasks`:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Przygotować projekt",
+    "description": "Dokończyć formularz i listę zadań.",
+    "status": "new"
+  }
+]
+```
+
+Pusta lista to `[]`. `id` musi być dodatnią liczbą całkowitą lub jej
+zapisem tekstowym. `description` może być tekstem, `null` albo nie występować.
+Pozostałe wymienione pola są wymagane. Dodatkowe pola odpowiedzi są pomijane.
+
+Treść `POST` i `PUT`:
+
+```json
+{
+  "title": "Przygotować projekt",
+  "description": "Dokończyć formularz i listę zadań.",
+  "status": "in_progress"
+}
+```
+
+Backend weryfikuje dane i ustala `user_id` na podstawie loginu
+`APP_USER_LOGIN` w lokalnym `.env`. Jest to wersja dla jednego użytkownika,
+bez logowania. Frontend nie wysyła `user_id`.
+Walidacja w przeglądarce nie zastępuje walidacji serwera.
+
+Po udanym `POST`, `PUT` lub `DELETE` frontend ponownie pobiera listę.
+Obsługuje odpowiedzi sukcesu z pustym ciałem, w tym `204 No Content`.
+Błędy powinny zwracać odpowiedni status HTTP: `400`/`422`, `404` lub `5xx`.
+Nie znaleziono zadania i nie znaleziono adresu API mogą mieć ten sam status
+`404`, dlatego komunikat uwzględnia obie możliwości.
+
+## Sprawdzenie
+
+1. Sprawdź układ przy szerokości 390 px i 1280 px, również z długim tytułem.
+2. Przy działającym API dodaj zadanie do każdej z trzech kolumn.
+3. Sprawdź kartę z pustym opisem — powinna pokazać „brak opisu”.
+4. Edytuj tytuł, opis i status. Po zapisie sprawdź przeniesienie karty
+   do właściwej kolumny oraz aktualizację liczników.
+5. Anuluj potwierdzenie usunięcia — karta ma pozostać. Następnie potwierdź
+   usunięcie — karta powinna zniknąć.
+6. Sprawdź, czy kolejne zapytania `GET` pokazują zapisane zmiany.
+7. Spróbuj wysłać pusty tytuł, same spacje i tytuł dłuższy niż 200 znaków.
+8. Wyłącz API: powinien pojawić się komunikat, a wpisana treść ma pozostać
+   w formularzu. Sprawdź także odpowiedzi `400`, `404` i `500`.
+9. Wpisz w zadaniu tekst przypominający HTML. Musi być widoczny jako tekst.
+10. Sprawdź w DevTools metody zapytań i przy działającym backendzie potwierdź
+   zmiany w bazie danych.
+
+Workflow `.github/workflows/ci.yaml` sprawdza HTML, CSS i składnię JavaScript
+po utworzeniu Pull Request do `main`. Workflow **Backend CI** sprawdza API
+z PostgreSQL. Ręczne sprawdzenie własnej bazy wymaga uruchomienia backendu
+z lokalną konfiguracją.
