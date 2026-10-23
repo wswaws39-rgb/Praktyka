@@ -11,7 +11,7 @@ Celem aplikacji jest ułatwienie organizacji pracy. Podczas realizacji projektu 
 ## Planowane funkcjonalności
 
 - Dodawanie zadań z tytułem i opisem.
-- Wyświetlanie listy zadań.
+- Wyświetlanie zadań w trzech kolumnach według statusu.
 - Edytowanie i usuwanie zadań.
 - Zmiana statusu: do zrobienia, w trakcie lub zakończone.
 - Wyszukiwanie i filtrowanie zadań.

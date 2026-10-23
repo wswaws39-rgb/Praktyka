@@ -64,13 +64,38 @@
         <section class="panel list-panel" id="task-section" aria-labelledby="list-heading">
           <div class="panel-heading">
             <div>
-              <p class="eyebrow">Twoja lista</p>
-              <h2 id="list-heading">Zadania <span class="task-count" id="task-count">0</span></h2>
+              <p class="eyebrow">Twoje zadania</p>
+              <h2 id="list-heading">Tablica zadań <span class="task-count" id="task-count">—</span></h2>
             </div>
             <button class="button button-secondary" id="refresh-tasks" type="button">Odśwież</button>
           </div>
           <p class="empty-state" id="list-message">Wczytywanie zadań…</p>
-          <ul class="task-list" id="task-list"></ul>
+          <div class="task-board" id="task-board">
+            <section class="status-column status-column-new" aria-labelledby="heading-new">
+              <div class="column-heading">
+                <h3 id="heading-new">Do zrobienia</h3>
+                <span class="column-count" id="count-new">—</span>
+              </div>
+              <p class="column-empty" id="empty-new">Brak danych.</p>
+              <ul class="task-list" id="tasks-new"></ul>
+            </section>
+            <section class="status-column status-column-progress" aria-labelledby="heading-in_progress">
+              <div class="column-heading">
+                <h3 id="heading-in_progress">W trakcie</h3>
+                <span class="column-count" id="count-in_progress">—</span>
+              </div>
+              <p class="column-empty" id="empty-in_progress">Brak danych.</p>
+              <ul class="task-list" id="tasks-in_progress"></ul>
+            </section>
+            <section class="status-column status-column-done" aria-labelledby="heading-done">
+              <div class="column-heading">
+                <h3 id="heading-done">Wykonane</h3>
+                <span class="column-count" id="count-done">—</span>
+              </div>
+              <p class="column-empty" id="empty-done">Brak danych.</p>
+              <ul class="task-list" id="tasks-done"></ul>
+            </section>
+          </div>
         </section>
       </div>
     </main>

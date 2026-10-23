@@ -19,10 +19,18 @@ const feedback = document.querySelector("#feedback");
 const formHeading = document.querySelector("#form-heading");
 const saveButton = document.querySelector("#save-task");
 const cancelButton = document.querySelector("#cancel-edit");
-const taskList = document.querySelector("#task-list");
 const listMessage = document.querySelector("#list-message");
 const taskCount = document.querySelector("#task-count");
 const taskSection = document.querySelector("#task-section");
+const taskColumns = {};
+
+for (const status of Object.keys(STATUSES)) {
+  taskColumns[status] = {
+    list: document.querySelector("#tasks-" + status),
+    count: document.querySelector("#count-" + status),
+    empty: document.querySelector("#empty-" + status)
+  };
+}
 
 let editingId = null;
 let busy = false;
@@ -145,7 +153,7 @@ function createTaskCard(task) {
   const card = document.createElement("li");
   card.className = "task-card";
 
-  const heading = document.createElement("h3");
+  const heading = document.createElement("h4");
   heading.className = "task-title";
   heading.textContent = task.title;
 
@@ -154,12 +162,11 @@ function createTaskCard(task) {
   badge.textContent = STATUSES[task.status].label;
   card.append(heading, badge);
 
-  if (task.description) {
-    const description = document.createElement("p");
-    description.className = "task-description";
-    description.textContent = task.description;
-    card.append(description);
-  }
+  const description = document.createElement("p");
+  const hasDescription = Boolean(task.description.trim());
+  description.className = hasDescription ? "task-description" : "task-description task-description-empty";
+  description.textContent = hasDescription ? task.description : "brak opisu";
+  card.append(description);
 
   const actions = document.createElement("div");
   actions.className = "task-actions";
@@ -184,12 +191,18 @@ async function loadTasks() {
 
   // Najpierw sprawdzamy całą odpowiedź, dopiero potem zmieniamy widok.
   const tasks = data.map(normalizeTask);
-  const fragment = document.createDocumentFragment();
-  tasks.forEach((task) => fragment.append(createTaskCard(task)));
-  taskList.replaceChildren(fragment);
+  for (const status of Object.keys(STATUSES)) {
+    const columnTasks = tasks.filter((task) => task.status === status);
+    const fragment = document.createDocumentFragment();
+    columnTasks.forEach((task) => fragment.append(createTaskCard(task)));
+    taskColumns[status].list.replaceChildren(fragment);
+    taskColumns[status].count.textContent = String(columnTasks.length);
+    taskColumns[status].empty.textContent = "Brak zadań.";
+    taskColumns[status].empty.hidden = columnTasks.length > 0;
+  }
   taskCount.textContent = String(tasks.length);
-  listMessage.textContent = "Lista jest pusta. Dodaj swoje pierwsze zadanie.";
-  listMessage.hidden = tasks.length > 0;
+  listMessage.textContent = "";
+  listMessage.hidden = true;
   listLoaded = true;
 }
 

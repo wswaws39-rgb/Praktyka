@@ -2,7 +2,9 @@
 
 ## Funkcje
 
-- Lista zadań oraz formularz dodawania i edycji.
+- Tablica zadań z trzema kolumnami statusów oraz formularz dodawania i edycji.
+- Karta pokazuje tytuł i opis; pusty opis jest zastępowany tekstem „brak opisu”.
+- Po zapisaniu nowego statusu zadanie trafia do właściwej kolumny.
 - Usuwanie z potwierdzeniem.
 - Zapytania `GET`, `POST`, `PUT` i `DELETE` przez `fetch`.
 - Tytuł wymagany po usunięciu skrajnych spacji, maksymalnie 200 znaków.
@@ -13,6 +15,19 @@
 - Zachowanie danych formularza po nieudanym zapisie i blokada ponownych
   kliknięć podczas zapytania.
 - Układ dla telefonu i komputera, zgodny z paletą i czcionkami z `docs/design.md`.
+
+## Kolumny tablicy
+
+| Status API | Kolumna |
+|---|---|
+| `new` | Do zrobienia |
+| `in_progress` | W trakcie |
+| `done` | Wykonane |
+
+Na komputerze kolumny są obok siebie. Przy szerokości do 760 px układają
+się jedna pod drugą. Każda kolumna ma licznik i informację o braku zadań.
+Przed pierwszym poprawnym pobraniem danych licznik pokazuje „—”, aby błąd
+połączenia nie był przedstawiany jako pusta tablica.
 
 ## Pliki
 
@@ -91,13 +106,18 @@ Nie znaleziono zadania i nie znaleziono adresu API mogą mieć ten sam status
 ## Sprawdzenie
 
 1. Sprawdź układ przy szerokości 390 px i 1280 px, również z długim tytułem.
-2. Przy działającym API dodaj zadanie, edytuj je i usuń.
-3. Sprawdź, czy kolejne zapytania `GET` pokazują zapisane zmiany.
-4. Spróbuj wysłać pusty tytuł, same spacje i tytuł dłuższy niż 200 znaków.
-5. Wyłącz API: powinien pojawić się komunikat, a wpisana treść ma pozostać
+2. Przy działającym API dodaj zadanie do każdej z trzech kolumn.
+3. Sprawdź kartę z pustym opisem — powinna pokazać „brak opisu”.
+4. Edytuj tytuł, opis i status. Po zapisie sprawdź przeniesienie karty
+   do właściwej kolumny oraz aktualizację liczników.
+5. Anuluj potwierdzenie usunięcia — karta ma pozostać. Następnie potwierdź
+   usunięcie — karta powinna zniknąć.
+6. Sprawdź, czy kolejne zapytania `GET` pokazują zapisane zmiany.
+7. Spróbuj wysłać pusty tytuł, same spacje i tytuł dłuższy niż 200 znaków.
+8. Wyłącz API: powinien pojawić się komunikat, a wpisana treść ma pozostać
    w formularzu. Sprawdź także odpowiedzi `400`, `404` i `500`.
-6. Wpisz w zadaniu tekst przypominający HTML. Musi być widoczny jako tekst.
-7. Sprawdź w DevTools metody zapytań i przy działającym backendzie potwierdź
+9. Wpisz w zadaniu tekst przypominający HTML. Musi być widoczny jako tekst.
+10. Sprawdź w DevTools metody zapytań i przy działającym backendzie potwierdź
    zmiany w bazie danych.
 
 Workflow `.github/workflows/ci.yaml` sprawdza HTML, CSS i składnię JavaScript

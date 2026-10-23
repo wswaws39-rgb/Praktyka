@@ -84,3 +84,18 @@ Znak nawiązuje do oznaczania wykonanych zadań
 i pasuje do przeznaczenia aplikacji.
 
 ![Logo aplikacji](logo.png)
+
+## Interfejs — uzupełnienie wymagań dnia 3
+
+Dotychczasowe makiety są materiałem z etapu projektowania.
+W bieżącej implementacji tablica jest podzielona na trzy kolumny:
+„Do zrobienia”, „W trakcie” i „Wykonane”. Zachowuje powyższą paletę,
+czcionkę Arial oraz niebieskie przyciski i znak aplikacji.
+
+Formularz zawiera tytuł, opis i listę wyboru statusu.
+Karta pokazuje tytuł i opis, a przy pustym opisie tekst „brak opisu”.
+Po edycji statusu karta przechodzi do odpowiedniej kolumny.
+Usuwanie wymaga potwierdzenia.
+
+Na komputerze trzy kolumny są obok siebie; do 760 px są ustawione pionowo.
+Dane są tworzone przez metody DOM i `textContent`, bez `innerHTML`.

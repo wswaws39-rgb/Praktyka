@@ -29,7 +29,7 @@ button { cursor: pointer; }
   outline-offset: 3px;
 }
 
-.container { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+.container { width: min(1440px, calc(100% - 48px)); margin-inline: auto; }
 .site-header { background: var(--white); border-bottom: 1px solid var(--border); }
 .header-content { display: flex; justify-content: space-between; align-items: center; gap: 20px; min-height: 88px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); font-size: 21px; font-weight: 700; text-decoration: none; }
@@ -52,16 +52,25 @@ button:disabled, input:disabled, textarea:disabled, select:disabled { cursor: wa
 .feedback { min-height: 24px; margin: 24px 0 16px; font-size: 14px; overflow-wrap: anywhere; }
 .feedback-error { color: var(--danger); }
 .feedback-success { color: var(--success); }
-.workspace { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: start; gap: 24px; }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; gap: 24px; }
 .panel { min-width: 0; padding: 26px; border: 1px solid #e5e7eb; border-radius: 16px; background: var(--white); box-shadow: 0 3px 12px rgb(31 41 55 / 3%); }
 .form-panel { grid-column: 2; grid-row: 1; }
 .list-panel { grid-column: 1; grid-row: 1; }
 .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
 .task-count { display: inline-block; min-width: 28px; margin-left: 6px; padding: 2px 8px; border-radius: 8px; background: #eff6ff; color: var(--primary); font-size: 14px; text-align: center; vertical-align: middle; }
+.task-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 12px; }
+.status-column { min-width: 0; min-height: 180px; padding: 12px; border-top: 3px solid var(--primary); border-radius: 10px; background: #f9fafb; }
+.status-column-progress { border-top-color: #b45309; }
+.status-column-done { border-top-color: var(--success); }
+.column-heading { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 16px; }
+.column-heading h3 { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
+.column-count { min-width: 24px; padding: 2px 6px; border-radius: 6px; background: var(--white); color: var(--muted); font-size: 12px; text-align: center; }
+.column-empty { margin: 0; padding: 22px 4px; color: var(--muted); font-size: 13px; text-align: center; }
 .task-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
-.task-card { min-width: 0; padding: 18px; border: 1px solid #e5e7eb; border-radius: 10px; }
+.task-card { min-width: 0; padding: 14px; border: 1px solid #e5e7eb; border-radius: 10px; background: var(--white); }
 .task-title { margin: 0 0 10px; font-size: 17px; overflow-wrap: anywhere; }
 .task-description { margin: 14px 0 0; color: var(--muted); overflow-wrap: anywhere; white-space: pre-wrap; }
+.task-description-empty { font-style: italic; }
 .task-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
 .status-new { background: #eff6ff; color: #1e40af; }
 .status-in-progress { background: #fef3c7; color: #92400e; }
@@ -80,6 +89,11 @@ textarea { display: block; resize: vertical; }
 .form-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .site-footer { padding-block: 32px; font-size: 12px; text-align: center; }
 
+@media (max-width: 1100px) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .form-panel, .list-panel { grid-column: auto; grid-row: auto; }
+}
+
 @media (max-width: 760px) {
   .container { width: calc(100% - 32px); }
   .header-content { min-height: 76px; }
@@ -88,6 +102,7 @@ textarea { display: block; resize: vertical; }
   .page-heading > .button { width: 100%; }
   .workspace { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .form-panel, .list-panel { grid-column: auto; grid-row: auto; }
+  .task-board { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .panel { padding: 22px; }
   .form-actions > .button { flex: 1 1 100%; }
 }
