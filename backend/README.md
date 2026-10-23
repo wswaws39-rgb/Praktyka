@@ -1,52 +1,139 @@
-# Backend
+# Backend — Node.js, Express i PostgreSQL
 
-## Przeznaczenie
+Serwer udostępnia frontend i API pod jednym adresem:
+http://127.0.0.1:3000. Dodawanie, edycja i usuwanie zadań zmieniają dane
+w PostgreSQL. Po odświeżeniu strony zadania są ponownie pobierane z bazy.
 
-Backend jest częścią aplikacji działającą na serwerze. Odbiera zapytania z frontendu, sprawdza przesłane dane i wykonuje operacje na zadaniach. Następnie odsyła wynik do interfejsu użytkownika.
+## Wymagania
 
-## Komunikacja z frontendem
+- [Node.js](https://nodejs.org/) 22 lub nowszy z npm.
+- Działający PostgreSQL i istniejąca baza task_manager z tabelami projektu.
+- pgAdmin do sprawdzenia bazy i konfiguracji roli połączenia.
 
-Frontend będzie komunikował się z backendem przez API za pomocą zapytań HTTP. Planujemy przesyłać dane w formacie JSON.
+pgAdmin zarządza bazą. Node.js uruchamia serwer aplikacji.
 
-Przykładowo, po wypełnieniu formularza dodawania zadania frontend wyśle dane do backendu. Backend sprawdzi, czy tytuł nie jest pusty, zapisze zadanie i zwróci informację o wyniku operacji.
+## 1. Przygotuj połączenie w pgAdmin
 
-## Baza danych
+Połącz się z PostgreSQL, wybierz bazę task_manager i otwórz Query Tool:
 
-Dane będą przechowywane w bazie PostgreSQL. Backend będzie odpowiadał za odczytywanie, dodawanie, aktualizowanie i usuwanie rekordów.
+~~~sql
+SELECT current_database();
+SELECT id, login FROM public.users ORDER BY id;
+~~~
 
-Frontend nie będzie łączył się bezpośrednio z bazą danych. Wszystkie operacje będą wykonywane przez backend.
+W istniejącej bazie z tabelami i rolą task_app wykonaj jako właściciel bazy
+plik database/05_app_permissions.sql.
 
-Planujemy, aby zadanie zawierało:
+Dla nowej bazy task_manager wykonaj po kolei: 01_schema.sql, 02_seed.sql,
+04_roles.sql, 05_app_permissions.sql. Pliki schematu, danych przykładowych
+i tworzenia ról są przeznaczone do pierwszego przygotowania bazy;
+plik 05 można wykonywać ponownie.
 
-- identyfikator;
-- tytuł;
-- opis;
-- status.
+W drzewie serwera wybierz **Login/Group Roles → task_app → Properties →
+Definition → Password**. Ustaw lokalne hasło tej roli i zapisz.
 
-## Planowane endpointy API
+## 2. Przygotuj konfigurację na Windows
 
-Endpoint to adres w API, pod który frontend wysyła zapytanie.
+Pobierz i rozpakuj aktualną gałąź feature/frontend-crud.
+Otwórz folder backend w Eksploratorze, kliknij pasek adresu,
+wpisz powershell i naciśnij Enter.
 
-| Metoda | Adres | Działanie |
+Sprawdź Node.js, następnie utwórz plik konfiguracji:
+
+~~~powershell
+node --version
+Copy-Item .env.example .env
+notepad .env
+~~~
+
+Uzupełnij plik według ustawień swojego serwera PostgreSQL:
+
+| Pole | Wartość |
+|---|---|
+| PGHOST | Adres PostgreSQL, zwykle 127.0.0.1 |
+| PGPORT | Port PostgreSQL, zwykle 5432 |
+| PGDATABASE | Nazwa istniejącej bazy, np. task_manager |
+| PGUSER | Rola połączenia: task_app |
+| PGPASSWORD | Hasło tej roli wewnątrz cudzysłowów |
+| APP_USER_LOGIN | Login z tabeli users, np. anna |
+| PORT | Port strony i API, domyślnie 3000 |
+
+Zapisz i zamknij plik. Plik .env jest pomijany przez Git.
+Zainstaluj zależności i uruchom serwer:
+
+~~~powershell
+npm.cmd ci
+npm.cmd start
+~~~
+
+Na Linux/macOS użyj cp .env.example .env, edytuj plik i wykonaj
+npm ci oraz npm start w katalogu backend.
+
+## 3. Otwórz stronę
+
+Otwórz **http://127.0.0.1:3000**. Serwer udostępnia HTML, CSS,
+JavaScript i API /api/tasks. Pozostaw okno terminala otwarte.
+Zatrzymanie serwera: **Ctrl+C**.
+
+Otwarcie index.html przez file:/// nie uruchamia API.
+Do działania z bazą używaj adresu HTTP.
+
+## 4. Sprawdź zapis w pgAdmin
+
+Dodaj na stronie zadanie, zmień jego status i odśwież stronę.
+W Query Tool w tej samej bazie sprawdź dane:
+
+~~~sql
+SELECT id, title, description, status, user_id
+FROM public.tasks
+WHERE user_id = (SELECT id FROM public.users WHERE login = 'anna')
+ORDER BY id DESC;
+~~~
+
+Jeśli wybrano inny APP_USER_LOGIN, użyj tego loginu w zapytaniu.
+Po usunięciu zadania rekord znika z tasks. Komentarze do tego zadania
+usuwa istniejąca relacja ON DELETE CASCADE.
+
+## API
+
+| Metoda | Adres | Wynik |
 |---|---|---|
-| GET | `/api/tasks` | Pobranie listy zadań |
-| POST | `/api/tasks` | Dodanie nowego zadania |
-| PUT | `/api/tasks/{id}` | Aktualizacja wybranego zadania |
-| DELETE | `/api/tasks/{id}` | Usunięcie wybranego zadania |
+| GET | /api/tasks | 200, tablica zadań wybranego użytkownika |
+| POST | /api/tasks | 201, utworzone zadanie |
+| PUT | /api/tasks/{id} | 200, zaktualizowane zadanie |
+| DELETE | /api/tasks/{id} | 204, puste ciało odpowiedzi |
 
-`{id}` oznacza identyfikator zadania, którego dotyczy operacja.
+POST i PUT przyjmują JSON z title, description i status.
+Tytuł po usunięciu skrajnych spacji ma 1–200 znaków, opis jest opcjonalny.
+Status: new, in_progress lub done. Klient nie może przesyłać user_id
+ani dodatkowych pól.
 
-## Proponowana struktura projektu
+Nieprawidłowe dane i identyfikator zwracają 400, brak zadania 404,
+za duże ciało zapytania 413, a błąd serwera 500.
+Limit ciała zapytania: 64 KiB. Parametry SQL przekazywane są przez $1, $2 itd.
 
-- `Controllers/` — odbieranie zapytań HTTP i zwracanie odpowiedzi.
-- `Models/` — opis struktury danych, na przykład modelu zadania.
-- `Services/` — logika aplikacji i reguły obsługi zadań.
-- `Data/` — komunikacja z bazą danych.
-- `Tests/` — testy części serwerowej.
-- `README.md` — dokumentacja backendu.
+## Użytkownik i zakres
 
-## Technologie i etap prac
+Jest to lokalna aplikacja dla jednego użytkownika wskazanego przez
+APP_USER_LOGIN. Serwer pobiera jego prawdziwy identyfikator z tabeli users
+i ogranicza operacje na zadaniach do tego identyfikatora.
+PGUSER jest rolą połączenia z PostgreSQL, a nie loginem użytkownika aplikacji.
 
-Planowana baza danych to PostgreSQL. Język programowania i technologia backendu wymagają jeszcze ustalenia.
+Ten etap nie zawiera logowania i rejestracji. Serwer nasłuchuje wyłącznie
+na 127.0.0.1, odrzuca obcy Host i pochodzenie żądania.
+Udostępnienie aplikacji innym osobom wymaga mechanizmu uwierzytelniania.
 
-Opisane API i struktura katalogów są planem dalszych prac. Instrukcja uruchomienia zostanie dodana po przygotowaniu backendu.
+## Testy
+
+npm test sprawdza HTTP, walidację, błędy, ochronę konfiguracji
+i ograniczenia lokalnego serwera.
+
+npm run test:integration wymaga jawnego TEST_DATABASE_URL do oddzielnej
+bazy o nazwie kończącej się na _test oraz konta z prawem tworzenia schematów
+i ról. Test tworzy własny schemat, wczytuje pliki 01 i 02, łączy API przez
+ograniczoną rolę i sprawdza rzeczywiste zmiany w PostgreSQL, kaskadę komentarzy
+oraz rozdzielenie danych użytkowników. Następnie usuwa swój schemat i rolę.
+Test nie korzysta z konfiguracji aplikacji w .env.
+
+Workflow Backend CI uruchamia oba zestawy testów z PostgreSQL 16.
+Workflow Frontend CI sprawdza HTML, CSS i składnię JavaScript.

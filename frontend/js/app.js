@@ -67,6 +67,7 @@ function titleValidationMessage(title) {
 function httpErrorMessage(status) {
   if (status === 400 || status === 422) return "Nieprawidłowe dane. Sprawdź pola formularza.";
   if (status === 401 || status === 403) return "Nie masz dostępu do tej operacji. Sprawdź swoje uprawnienia.";
+  if (status === 413) return "Przesłane dane są za duże. Skróć opis zadania.";
   if (status === 404) return "Nie znaleziono zadania lub adresu API. Odśwież listę i spróbuj ponownie.";
   if (status >= 500) return "Wystąpił błąd serwera. Spróbuj ponownie później.";
   return "Nie udało się wykonać operacji. Spróbuj ponownie.";

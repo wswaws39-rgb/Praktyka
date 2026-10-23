@@ -22,11 +22,12 @@
 
 ## Uruchomienie
 
-Serwer aplikacji powinien udostępniać katalog `frontend/` oraz API
-`/api/tasks` w tej samej domenie. W `main` backend nie jest jeszcze
-zaimplementowany: samo otwarcie frontendu nie uruchamia API ani bazy danych.
+Serwer w `backend/` udostępnia katalog `frontend/` oraz API `/api/tasks`
+w tej samej domenie. Wykonaj [instrukcję backendu](../backend/README.md),
+uzupełnij `backend/.env`, uruchom `npm ci` i `npm start` w katalogu
+`backend`, a następnie otwórz `http://127.0.0.1:3000`.
 
-Sam wygląd strony można uruchomić lokalnie:
+Sam wygląd strony, bez API, można również uruchomić lokalnie:
 
 ```bash
 python -m http.server 8000 --directory frontend
@@ -76,8 +77,9 @@ Treść `POST` i `PUT`:
 }
 ```
 
-Backend musi sam zweryfikować dane i uprawnienia oraz ustalić `user_id`
-na podstawie zalogowanego użytkownika. Frontend nie wysyła fikcyjnego `user_id`.
+Backend weryfikuje dane i ustala `user_id` na podstawie loginu
+`APP_USER_LOGIN` w lokalnym `.env`. Jest to wersja dla jednego użytkownika,
+bez logowania. Frontend nie wysyła `user_id`.
 Walidacja w przeglądarce nie zastępuje walidacji serwera.
 
 Po udanym `POST`, `PUT` lub `DELETE` frontend ponownie pobiera listę.
@@ -99,5 +101,6 @@ Nie znaleziono zadania i nie znaleziono adresu API mogą mieć ten sam status
    zmiany w bazie danych.
 
 Workflow `.github/workflows/ci.yaml` sprawdza HTML, CSS i składnię JavaScript
-po utworzeniu Pull Request do `main`. Test działania z prawdziwą bazą
-wymaga implementacji i uruchomienia backendu.
+po utworzeniu Pull Request do `main`. Workflow **Backend CI** sprawdza API
+z PostgreSQL. Ręczne sprawdzenie własnej bazy wymaga uruchomienia backendu
+z lokalną konfiguracją.

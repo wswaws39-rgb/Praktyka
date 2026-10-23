@@ -23,7 +23,7 @@ Celem aplikacji jest ułatwienie organizacji pracy. Podczas realizacji projektu 
 - CSS — wygląd interfejsu.
 - JavaScript — obsługa działań użytkownika i komunikacja z API.
 - PostgreSQL — przechowywanie danych.
-- Technologia backendu — do ustalenia.
+- Node.js i Express — serwer HTTP i API obsługujące zadania.
 
 ## Narzędzia
 
@@ -48,7 +48,13 @@ Celem aplikacji jest ułatwienie organizacji pracy. Podczas realizacji projektu 
 
 ## Uruchomienie
 
-Instrukcja uruchomienia zostanie uzupełniona na kolejnych etapach projektu.
+Przygotuj PostgreSQL według [instrukcji backendu](backend/README.md).
+W katalogu `backend` skopiuj `.env.example` do `.env` i uzupełnij dane
+lokalnej bazy, następnie wykonaj `npm ci` oraz `npm start`.
+
+Otwórz `http://127.0.0.1:3000`. Ten serwer udostępnia frontend i API.
+pgAdmin pozwala sprawdzić, czy dodawanie, edycja i usuwanie zmieniają dane.
+Pełna instrukcja dla Windows znajduje się w `backend/README.md`.
 
 ## Pierwsze zajęcia
 
